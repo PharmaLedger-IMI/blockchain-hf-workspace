@@ -21,9 +21,15 @@ echo "Phase 2: Installing Hyperledger Fabric samples and test network for Docker
 
 echo ""
 echo "---------------------------------------------------------------------------------------------------------------"
-echo "Phase 3: Building docker images..."
-cd hf-adapter
-docker build -t hf:anchor_hf_cc.0.1 -f ./cc-anchor/Dockerfile .
-cd network/fabric-ccs-build
-docker build -t hf:fabric-ccs-build.1.0 -f Dockerfile .
-cd ../..
+echo "Phase 3: Cleaning up..."
+rm hyperledger-install.sh
+
+echo ""
+echo "---------------------------------------------------------------------------------------------------------------"
+echo "DONE!"
+echo "             NOTICE: !!! "
+echo "  Start the Hyperledger network with the start.sh script"
+echo "  Deploy the anchoring contract with the deploySC.sh script"
+
+echo "Please run on a terminal window the monitordocker.sh script to view Hyperledger logs before running the above commands."
+echo "to view operation progress."
