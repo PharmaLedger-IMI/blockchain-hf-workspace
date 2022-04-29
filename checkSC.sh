@@ -1,2 +1,3 @@
-peer chaincode query -C anchoring -n anchoring -c  '{"Args":["check"]}'
+source ./setEnv.sh
+peer chaincode query -C anchoring -n anchor -c  '{"Args":["check"]}'
 

@@ -23,7 +23,7 @@ cp hf-adapter/package.json work
 cp hf-adapter/cc-anchor/Dockerfile work
 
 # Deploy the SmartContract/CodeChain as a Service. 
-./fabric-samples/test-network/network.sh deployCCAAS -c anchoring -ccn anchoring -ccl javascript -ccp ${PWD}/work
+./fabric-samples/test-network/network.sh deployCCAAS -c anchoring -ccn anchor -ccl javascript -ccp ${PWD}/work
 
 echo "-------------------------------------------------------------------------------------------"
 echo "Done!"
