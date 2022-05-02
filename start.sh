@@ -8,16 +8,40 @@ sleep 4
 ./network.sh createChannel -c anchoring
 sleep 2
 
-echo "Creating the identities for the hlf-adapter: rcaadmin and hlfRmsUser"
-fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-org1 --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
-fabric-ca-client register --caname ca-org1 --id.name rcaadmin --id.secret rcaadminpw --id.type admin --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem" --id.affiliation="Org1"
-
-#fabric-ca-client enroll -u https://hlfRmsUser:hlfRmsUserPw@localhost:7054 --caname ca-org1 --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
-fabric-ca-client register --caname ca-org1 --id.name hlfRmsUser --id.secret hlfRmsUserpw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem" --id.affiliation=Org1
+echo "Adding the affiliation to the network..."
+fabric-ca-client affiliation add org1.anchoring  --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
 
 echo "Creating the connection profile for the Hyperledger network..."
 organizations/ccp-generate.sh
 cp organizations/peerOrganizations/org1.example.com/connection-org1.json ../../config_files
 cd ../../
-cat config_files/connection-org1.json | sed 's,ca.org1.example.com\":,'rms-ecert-ca\":',g' > ./hf-adapter/hlf-adapter/gateway/rms_ccp.json
+cat config_files/connection-org1.json | sed 's,ca.org1.example.com\":,'rms-ecert-ca\":',g' | sed 's,localhost:7051,peer0.org1.example.com:7051,g' | sed 's,localhost:7054,ca_org1:7054,g' > ./hf-adapter/hlf-adapter/gateway/rms_ccp.json
 
+echo "Creating the Identity for the HLF-adapter application..."
+./registerusers.sh
+
+echo "Deploying the Codechain (Smart contract)..."
+./deploySC.sh
+
+sleep 2
+echo "Checking the Smart Contract..."
+./checkSC.sh
+
+sleep 2
+echo "Building the HLF-Adapter docker image..."
+cd hf-adapter/hlf-adapter
+
+cat app.js | sed 's,RmsMSP,Org1MSP,g' | sed 's,rms.anchoring,org1.anchoring,g' > work.jsp
+cp work.jsp app.js
+rm work.jsp
+
+cd utils
+
+cat CAUtil.js | sed 's,RmsMSP,Org1MSP,g' > work.jsp
+cp work.jsp CAUtil.js
+rm work.jsp
+
+
+docker build -t hlf-adapter .
+
+docker run -dp 3000:3000 --network=fabric_test --name hlf-adapter hlf-adapter
