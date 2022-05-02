@@ -18,6 +18,7 @@ cat config_files/connection-org1.json | sed 's,ca.org1.example.com\":,'rms-ecert
 echo "-----------------------------------------------"
 echo "Creating the Identity for the HLF-adapter application..."
 ./registerusers.sh
+sleep 2
 
 echo "-----------------------------------------------"
 echo "Adding the affiliation to the network..."
