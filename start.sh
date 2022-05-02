@@ -1,54 +1,39 @@
 #!/bin/bash
+echo "Starting Hyperledger Fabric Network..."
+CHAINCODEID=`cat CHAINCODE_ID`
+echo $CHAINCODEID
 
-echo "Starting up Hyperledger Fabric test network..."
-cd  fabric-samples
-cd  test-network
-./network.sh up -ca
+docker run --rm -d --name peer0org1_anchor_ccaas  \
+                  --network fabric_test \
+                  -e CHAINCODE_SERVER_ADDRESS=0.0.0.0:9999 \
+                  -e CHAINCODE_ID=$CHAINCODEID -e CORE_CHAINCODE_ID_NAME=$CHAINCODEID \
+                    anchor_ccaas_image:latest
+
+docker run --rm -d --name peer0org2_anchor_ccaas  \
+                  --network fabric_test \
+                  -e CHAINCODE_SERVER_ADDRESS=0.0.0.0:9999 \
+                  -e CHAINCODE_ID=$CHAINCODEID -e CORE_CHAINCODE_ID_NAME=$CHAINCODEID \
+                    anchor_ccaas_image:latest
+
+sleep 2
+echo "Starting orderers..."
+docker container start ca_orderer
+docker container start orderer.example.com
+sleep 2
+
+echo "Starting CAs..."
+docker container start ca_org1
+docker container start ca_org2 
+
+sleep 2
+echo "Starting peers..."
+read
+docker container start peer0.org1.example.com
+docker container start peer0.org2.example.com
+docker container start cli
+
+
 sleep 4
-./network.sh createChannel -c anchoring
-sleep 2
+echo "Starting HLF-Adapter container..."
+docker container start hlf-adapter
 
-echo "-----------------------------------------------"
-echo "Creating the connection profile for the Hyperledger network..."
-organizations/ccp-generate.sh
-cp organizations/peerOrganizations/org1.example.com/connection-org1.json ../../config_files
-cd ../../
-cat config_files/connection-org1.json | sed 's,ca.org1.example.com\":,'rms-ecert-ca\":',g' | sed 's,localhost:7051,peer0.org1.example.com:7051,g' | sed 's,localhost:7054,ca_org1:7054,g' > ./hf-adapter/hlf-adapter/gateway/rms_ccp.json
-
-echo "-----------------------------------------------"
-echo "Creating the Identity for the HLF-adapter application..."
-./registerusers.sh
-sleep 2
-
-echo "-----------------------------------------------"
-echo "Adding the affiliation to the network..."
-fabric-ca-client affiliation add org1.anchoring  --tls.certfiles "${PWD}/fabric-samples/test-network/organizations/fabric-ca/org1/ca-cert.pem"
-
-echo "-----------------------------------------------"
-echo "Deploying the Codechain (Smart contract)..."
-./deploySC.sh
-
-sleep 2
-echo "-----------------------------------------------"
-echo "Checking the Smart Contract..."
-./checkSC.sh
-
-sleep 2
-echo "-----------------------------------------------"
-echo "Building the HLF-Adapter docker image..."
-cd hf-adapter/hlf-adapter
-
-cat app.js | sed 's,RmsMSP,Org1MSP,g' | sed 's,rms.anchoring,org1.anchoring,g' > work.jsp
-cp work.jsp app.js
-rm work.jsp
-
-cd utils
-
-cat CAUtil.js | sed 's,RmsMSP,Org1MSP,g' > work.jsp
-cp work.jsp CAUtil.js
-rm work.jsp
-
-cd ..
-docker build -t hlf-adapter .
-
-docker run -dp 3000:3000 --network=fabric_test --name hlf-adapter hlf-adapter
