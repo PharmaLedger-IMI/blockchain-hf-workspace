@@ -27,7 +27,6 @@ docker container start ca_org2
 
 sleep 2
 echo "Starting peers..."
-read
 docker container start peer0.org1.example.com
 docker container start peer0.org2.example.com
 docker container start cli
