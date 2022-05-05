@@ -25,7 +25,8 @@ cp hf-adapter/cc-anchor/Dockerfile work
 # Deploy the SmartContract/CodeChain as a Service. 
 ./fabric-samples/test-network/network.sh deployCCAAS -c anchoring -ccn anchor -ccl javascript -ccp ${PWD}/work
 
-read 
+# echo "Press enter to continue"
+# read 
 
 echo "-------------------------------------------------------------------------------------------"
 echo "Done!"
