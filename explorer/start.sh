@@ -8,7 +8,7 @@ echo ${ADMINPK}
 cat connection-profile/template.json | sed "s,PRIVSK,${ADMINPK},g" > connection-profile/test-network.json
 
 # Na ultima versão do docker o compose já faz parte dos comandos do docker
-docker compose up -d
+docker-compose up -d
 
 # Versão antiga
 #docker-compose up
