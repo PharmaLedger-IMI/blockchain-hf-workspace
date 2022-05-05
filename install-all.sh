@@ -10,6 +10,7 @@ echo "It also instatiates the Hyperledger Anchoring version for OpenDSU".
 echo ""
 echo "---------------------------------------------------------------------------------------------------------------"
 echo "Phase 1: Download required software..."
+# Using the link documented at https://hyperledger-fabric.readthedocs.io/en/latest/install.html#download-fabric-samples-docker-images-and-binaries
 curl -sSL https://bit.ly/2ysbOFE > hyperledger-install.sh
 chmod +x hyperledger-install.sh
 git clone https://github.com/PharmaLedger-IMI/hf-adapter.git
