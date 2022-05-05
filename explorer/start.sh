@@ -13,3 +13,4 @@ docker compose up -d
 # Versão antiga
 #docker-compose up
 
+echo "Explorer Web site available at http://localhost:8080"
