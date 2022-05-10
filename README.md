@@ -27,6 +27,27 @@ Run this command: **./stop.sh** to stop all the system containters, without loos
 
 Run the *stopDown.sh* command to stop all containers and remove them from the system. This operation will delete all ledger data.
 
+## Note
+
+For some uses this has been reported to fail with errors such as:
+```txt
+Removing network fabric_test
+ERROR: error while removing network: network fabric_test id fcf19eadfcea1635308b69394e3eea32dbf42171c9abb48948a2b386c4325030 has active endpoints
+Error: No such volume: docker_orderer.example.com
+Error: No such volume: docker_peer0.org1.example.com
+Error: No such volume: docker_peer0.org2.example.com
+```
+(With some versions of docker-compose these volumes appear to be called
+compose_peer0.org1.example.com network prune and not docker_peer0.org1.example.com).
+
+If it happens manually remove the network and volumes with commands such as 
+```sh
+$ docker network prune
+$ docker volume prune
+```
+but be *careful* that these commands will also remove other networks
+and volumes that are not in use by running containers.
+
 # Configure the environment:
 
 If needed to run Hyperledger commands, just run the script **configenv.sh** with the command **source ./configenv.sh** . **IMPORTANT:** The script should be **sourced** for the environment variables to pass to the global environment to use the Hyperledger tools
