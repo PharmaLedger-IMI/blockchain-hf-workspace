@@ -19,7 +19,13 @@ This script will download all the necessary docker images for the Hyperledger co
 
 Run this command only if the system was already initialized with the **startInit.sh** command and it was stopped with the **stop.sh** command. This will start all containers while preserving ledger data.
 
-# Stopping:
+## Services
+
+hlf-adapter is available at private IP address 172.16.16.16 port 3000 on a private network named dsu-bc-net. (This was done so that localhost:3000 does not conflict with hlf-adapter).
+
+The rest of HLF services run on a dynamically created private network named fabric_test, usually 172.19,20,..., but will vary on each ./startInit.sh
+
+# Stopping:hlf
 
 Run this command: **./stop.sh** to stop all the system containters, without loosing data.
 

@@ -60,7 +60,7 @@ docker build -t hlf-adapter .
 # use the qbn-net 172.16.16.16 private IP address for the hlf-adapter.
 #
 #docker run -dp 3000:3000 --network=fabric_test --name hlf-adapter hlf-adapter
+docker network create --driver bridge --subnet 172.16.16.0/24 dsu-bc-net
 docker create --network=fabric_test --name hlf-adapter hlf-adapter
-docker network create --driver bridge --subnet 172.16.16.0/24 qbn-net
-docker network connect --ip 172.16.16.16 qbn-net hlf-adapter
+docker network connect --ip 172.16.16.16 dsu-bc-net hlf-adapter
 docker start hlf-adapter
