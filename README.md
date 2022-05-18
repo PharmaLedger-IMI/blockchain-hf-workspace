@@ -43,8 +43,6 @@ Error: No such volume: docker_orderer.example.com
 Error: No such volume: docker_peer0.org1.example.com
 Error: No such volume: docker_peer0.org2.example.com
 ```
-(With some versions of docker-compose these volumes appear to be called
-compose_peer0.org1.example.com network prune and not docker_peer0.org1.example.com).
 
 If it happens manually remove the network and volumes with commands such as 
 ```sh
