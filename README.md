@@ -15,7 +15,9 @@ Startup progress can be followed by previously running the *monitordocker.sh* sc
 
 This script will download all the necessary docker images for the Hyperledger containers, create the necessary crypto material, deploy the codechain and build, deploy and start the hlf-adapter container.
 
-# Starting:
+# Starting (for the 2nd time onwards):
+
+**start.sh**
 
 Run this command only if the system was already initialized with the **startInit.sh** command and it was stopped with the **stop.sh** command. This will start all containers while preserving ledger data.
 
