@@ -20,7 +20,7 @@ chmod +x hyperledger-install.sh
 HLF_ADAPTER_GIT_HASH=ffae36a1d6ce12d1dae4e57a695e46ed038eeb88
 mkdir hf-adapter
 cd hf-adapter
-git init --initial-branch=master
+git init
 git remote add origin https://github.com/PharmaLedger-IMI/hf-adapter.git
 git fetch --depth 1 origin ${HLF_ADAPTER_GIT_HASH}
 git checkout FETCH_HEAD
