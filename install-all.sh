@@ -6,6 +6,12 @@ set -u
 echo "This script installs Hyperledger Fabric with associated binary tools and docker images."
 echo "It also instatiates the Hyperledger Anchoring version for OpenDSU".
 
+if ! jq --help &> /dev/null
+then
+    echo 1>&2 "The shell scripts from the fabric samples need the jq command. Please install jq. (Ex: sudo apt install jq) "
+    exit 1
+fi
+
 echo ""
 echo "---------------------------------------------------------------------------------------------------------------"
 echo "Phase 1: Download required software..."
