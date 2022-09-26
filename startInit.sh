@@ -61,6 +61,6 @@ docker build -t hlf-adapter .
 #
 #docker run -dp 3000:3000 --network=fabric_test --name hlf-adapter hlf-adapter
 docker network create --driver bridge --subnet 172.16.16.0/24 dsu-bc-net
-docker create --restart=always --network=fabric_test --name hlf-adapter hlf-adapter
+docker create --network=fabric_test --name hlf-adapter hlf-adapter
 docker network connect --ip 172.16.16.16 dsu-bc-net hlf-adapter
 docker start hlf-adapter

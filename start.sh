@@ -3,13 +3,13 @@ echo "Starting Hyperledger Fabric Network..."
 CHAINCODEID=`cat CHAINCODE_ID`
 echo $CHAINCODEID
 
-docker run --restart=always -d --name peer0org1_anchor_ccaas  \
+docker run --rm -d --name peer0org1_anchor_ccaas  \
                   --network fabric_test \
                   -e CHAINCODE_SERVER_ADDRESS=0.0.0.0:9999 \
                   -e CHAINCODE_ID=$CHAINCODEID -e CORE_CHAINCODE_ID_NAME=$CHAINCODEID \
                     anchor_ccaas_image:latest
 
-docker run --restart=always -d --name peer0org2_anchor_ccaas  \
+docker run --rm -d --name peer0org2_anchor_ccaas  \
                   --network fabric_test \
                   -e CHAINCODE_SERVER_ADDRESS=0.0.0.0:9999 \
                   -e CHAINCODE_ID=$CHAINCODEID -e CORE_CHAINCODE_ID_NAME=$CHAINCODEID \
